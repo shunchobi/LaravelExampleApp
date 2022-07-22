@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\SampleController;
+use App\Services\StorageService\IStorageService;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (IStorageService $storageService) {
+    $storageService->createFile('new_file.txt');
+
     return view('welcome');
 });
 
-Route::get('/db', function(){
-    return view('database');
-});
+Route::get('/auth_test', [SampleController::class, 'index']);
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
+require __DIR__.'/auth.php';
